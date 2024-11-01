@@ -11,7 +11,7 @@ const app = express()
 
 // using the cors middleware to avoid CORS issues
 app.use(cors({
-    origin: "*", // replace with front end url on deployment
+    origin: "http://localhost:3000", // replace with front end url on deployment
     credentials:true
 }))
 
