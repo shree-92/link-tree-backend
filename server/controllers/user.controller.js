@@ -42,7 +42,7 @@ const registerController = asyncHandler(async(req, res)=>{
     if(!createUser){return res.status(500).json({ message: "Failed to create a new user" })}
 
     // correct pass give cookie
-    generateToken(res, createUser._id)
+    await generateToken(res, createUser._id)
 
     // sending a response
     res.status(200).json({message : "created the new user"})
@@ -71,7 +71,7 @@ const loginController = asyncHandler(async(req, res)=>{
     if(!isPasswordCorrect){return res.status(401).json({ message: "wrong username or password try again" })}
 
     // correct pass give cookie
-    generateToken(res, user._id)
+    await generateToken(res, user._id)
 
     return res.status(200).json("user logged in")
 
