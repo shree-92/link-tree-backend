@@ -17,6 +17,8 @@ const generateToken = async(res, userID)=>{
         // sameSite: "none",
         maxAge: (24*60*60*1000) * 1 // cookie will vanish in one day
     })
+
+    return res
 }
 
 export { generateToken }
