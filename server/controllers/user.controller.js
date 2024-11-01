@@ -25,7 +25,7 @@ const registerController = asyncHandler(async(req, res)=>{
 
     // check if such USERNAME is taken
     const takenUsername = await User.findOne({username});
-    if(takenUsername){res.status(401).json({ message: "Username is already taken" })}
+    if(takenUsername){res.status(401).json({ message: "this url is taken" })}
 
     // check if the email is taken
     const takenEmail = await User.findOne({email});
