@@ -52,15 +52,15 @@ const registerController = asyncHandler(async(req, res)=>{
 const loginController = asyncHandler(async(req, res)=>{
 
     // getting the user data from body
-    const {username, password} = req.body;
+    const {email, password} = req.body;
 
     // validating the user data
-    if(!username || !password){return res.status(401).json({ message: "All fields are required" })}
+    if(!email || !password){return res.status(401).json({ message: "All fields are required" })}
 
     if(password.length < 8){return res.status(401).json({ message: "password is too smol" })}
 
     // finding the user based on userdata
-    const user = await User.findOne({username});
+    const user = await User.findOne({email});
 
     if(!user){return res.status(404).json({ message: "user not found" })}
 
