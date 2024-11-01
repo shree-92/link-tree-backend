@@ -14,7 +14,7 @@ const generateToken = async(res, userID)=>{
     res.cookie("jwt", token , {
         httpOnly:true,
         //secure: true, // uncomment on deployment
-        sameSite: "none",
+        // sameSite: "none",
         maxAge: (24*60*60*1000) * 1 // cookie will vanish in one day
     })
 }
