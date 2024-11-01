@@ -73,7 +73,7 @@ const loginController = asyncHandler(async(req, res)=>{
     // correct pass give cookie
     generateToken(res, user._id)
 
-    res.status(200).json("user logged in")
+    return res.status(200).json("user logged in")
 
 })
 
