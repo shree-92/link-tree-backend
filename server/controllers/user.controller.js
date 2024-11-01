@@ -14,22 +14,22 @@ const registerController = asyncHandler(async(req, res)=>{
     const {username, password, email} = req.body;
 
     // validating the user data
-    if( !username || !password || ! email){rea.status(404).json({message: "all fields are required to register"})};
+    if( !username || !password || ! email){return res.status(404).json({message: "all fields are required to register"})};
 
-    if(password.length < 8){res.status(401).json({ message: "Password is too short" })};
+    if(password.length < 8){return res.status(401).json({ message: "Password is too short" })};
 
     const emailRegex = /^[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
     if (!emailRegex.test(email)) {
-        res.status(400).json({ message: "Invalid email format" });
+       return res.status(400).json({ message: "Invalid email format" });
     }
 
     // check if such USERNAME is taken
     const takenUsername = await User.findOne({username});
-    if(takenUsername){res.status(401).json({ message: "this url is taken" })}
+    if(takenUsername){return res.status(401).json({ message: "this url is taken" })}
 
     // check if the email is taken
     const takenEmail = await User.findOne({email});
-    if(takenEmail){res.status(401).json({ message: "Email is already taken" })}
+    if(takenEmail){return res.status(401).json({ message: "Email is already taken" })}
 
     // hash the password
     const salt = await bcrypt.genSalt(10)
@@ -39,7 +39,10 @@ const registerController = asyncHandler(async(req, res)=>{
     const createUser = await User.create({username, email, password:hashedPassword});
 
     // check is the user has been created
-    if(!createUser){res.status(500).json({ message: "Failed to create a new user" })}
+    if(!createUser){return res.status(500).json({ message: "Failed to create a new user" })}
+
+    // correct pass give cookie
+    generateToken(res, createUser._id)
 
     // sending a response
     res.status(200).json({message : "created the new user"})
@@ -52,20 +55,20 @@ const loginController = asyncHandler(async(req, res)=>{
     const {username, password} = req.body;
 
     // validating the user data
-    if(!username || !password){throw new ApiError(401, "all fields are required")}
+    if(!username || !password){return res.status(401).json({ message: "All fields are required" })}
 
-    if(password.length < 8){throw new ApiError(401, "password is too smol")}
+    if(password.length < 8){return res.status(401).json({ message: "password is too smol" })}
 
     // finding the user based on userdata
     const user = await User.findOne({username});
 
-    if(!user){throw new ApiError(404, "user not found")}
+    if(!user){return res.status(404).json({ message: "user not found" })}
 
     // comparing the passwords
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
     // wrong pass
-    if(!isPasswordCorrect){throw new ApiError(401, "wrong username or password try again")}
+    if(!isPasswordCorrect){return res.status(401).json({ message: "wrong username or password try again" })}
 
     // correct pass give cookie
     generateToken(res, user._id)
